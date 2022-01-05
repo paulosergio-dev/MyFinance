@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Minhas Contas</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Saldo</th>
+        </tr>
+
+    </thead>
+
+    @{
+        foreach (var item in (List<ContaModel>)ViewBag.ListaConta)
+        {
+            <tbody>
+                <tr>
+                    <td><button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button></td>
+                    <td>@item.Id.ToString()</td>
+                    <td>@item.Nome.ToString()</td>
+                    <td>R$ @item.Saldo.ToString()</td>
+
+                </tr>
+            </tbody>
+        }
+
+    }
+
+</table>
+
+<button type="button" class="btn btn-block btn-primary" onclick="CriarConta()">Criar Conta</button>
+
+<script>
+    function CriarConta() {
+        window.location.href = "../Conta/CriarConta";
+    }
+
+    function Excluir(id_conta) {
+        window.location.href = "../Conta/ExcluirConta/" + id_conta;
+    }
+
+
+</script>

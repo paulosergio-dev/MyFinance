@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Plano de Contas</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>#</th>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Tipo</th>
+        </tr>
+
+    </thead>
+
+    @{
+        foreach (var item in (List<PlanoContaModel>)ViewBag.ListaPlanoContas)
+        {
+            <tbody>
+                <tr>
+
+                    <td><button type="button" class="btn btn-primary" onclick="Editar(@item.Id.ToString())">Editar</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button></td>
+                    <td>@item.Id.ToString()</td>
+                    <td>@item.Descricao.ToString()</td>
+                    <td>@item.Tipo.ToString().Replace("R", "Receita").Replace("D", "Despesa")</td>
+
+                </tr>
+            </tbody>
+        }
+
+    }
+
+</table>
+
+<button type="button" class="btn btn-block btn-primary" onclick="CriarPlanoConta()">Criar Plano de Conta</button>
+
+<script>
+    function CriarPlanoConta() {
+        window.location.href = "../PlanoConta/CriarPlanoConta";
+    }
+
+    function Excluir(id_conta) {
+        window.location.href = "../PlanoConta/ExcluirPlanoConta/" + id_conta;
+    }
+
+    function Editar(id_conta) {
+        window.location.href = "../PlanoConta/CriarPlanoConta/" + id_conta;
+    }
+
+
+</script>
