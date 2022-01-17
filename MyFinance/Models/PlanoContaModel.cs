@@ -78,7 +78,7 @@ namespace MyFinance.Models
             }
             else
             {
-                sql = $"UPDATE PLANO_CONTAS SET DESCRICAO = '{Descricao}','{Tipo}' WHERE USUARIO_ID='{id_usuario_logado}' AND ID='{Id}'";
+                sql = $"UPDATE PLANO_CONTAS SET DESCRICAO = '{Descricao}', TIPO='{Tipo}' WHERE USUARIO_ID='{id_usuario_logado}' AND ID='{Id}'";
             }
 
             DAL objDAL = new DAL();
