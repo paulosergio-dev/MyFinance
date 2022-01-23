@@ -25,6 +25,49 @@ namespace MyFinance.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Registrar(TransacaoModel formulario)
+        {
+            if (ModelState.IsValid)
+            {
+                formulario.HttpContextAccessor = HttpContextAccessor;
+                formulario.Insert();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Registrar(int? id)
+        {
+            if (id != null)
+            {
+                TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
+                ViewBag.Registro = objTransacao.CarregarRegistro(id);
+            }
+            ViewBag.ListaContas = new ContaModel(HttpContextAccessor).ListaConta();
+            ViewBag.ListaPlanoContas = new PlanoContaModel(HttpContextAccessor).ListaPlanoContas();
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ExcluirTransacao(int id)
+        {
+
+            TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
+            ViewBag.Registro = objTransacao.CarregarRegistro(id);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Excluir(int id)
+        {
+            TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
+            objTransacao.Excluir(id);
+            return RedirectToAction("Index");
+        }
+
+
         public IActionResult Extrato()
         {
             return View();

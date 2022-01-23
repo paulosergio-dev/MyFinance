@@ -16,6 +16,9 @@
     <Content Update="Views\PlanoConta\CriarPlanoConta.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Transacao\Registrar.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Transacao\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

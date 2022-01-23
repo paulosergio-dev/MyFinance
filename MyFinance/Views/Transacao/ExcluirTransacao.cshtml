@@ -1,0 +1,24 @@
+﻿
+<h2>Deseja excluir a transação selecionada?</h2>
+
+<p><strong>ID:</strong> @ViewBag.Registro.Id.ToString()</p>
+<p><strong>Data:</strong> @ViewBag.Registro.Data.ToString()</p>
+<p><strong>Histórico:</strong> @ViewBag.Registro.Descricao.ToString()</p>
+<p><strong>Valor:</strong> @ViewBag.Registro.Valor.ToString()</p>
+
+<button type="button" onclick="Cancelar()" class="btn btn-block btn-danger">Cancelar</button>
+<button type="button" onclick="Excluir(@ViewBag.Registro.Id.ToString())" class="btn btn-block btn-danger">Excluir</button>
+
+<script>
+    function Excluir(id)
+    {
+        window.location.href = "../../Transacao/Excluir/" + id;
+    }
+
+    function Cancelar()
+    {
+        window.location.href = "../../Transacao/Index";
+    }
+
+
+</script>
