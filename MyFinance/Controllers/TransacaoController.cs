@@ -53,7 +53,6 @@ namespace MyFinance.Controllers
         [HttpGet]
         public IActionResult ExcluirTransacao(int id)
         {
-
             TransacaoModel objTransacao = new TransacaoModel(HttpContextAccessor);
             ViewBag.Registro = objTransacao.CarregarRegistro(id);
             return View();
