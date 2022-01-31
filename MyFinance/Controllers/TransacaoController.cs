@@ -66,14 +66,36 @@ namespace MyFinance.Controllers
             return RedirectToAction("Index");
         }
 
-
-        public IActionResult Extrato()
+        [HttpGet]
+        [HttpPost]
+        public IActionResult Extrato(TransacaoModel formulario)
         {
+            formulario.HttpContextAccessor = HttpContextAccessor;
+            ViewBag.ListaTransacao = formulario.ListaTransacao();
+            ViewBag.ListaContas = new ContaModel(HttpContextAccessor).ListaConta();
             return View();
         }
 
         public IActionResult Dashboard()
         {
+            List<DashBoard> lista = new DashBoard().RetornarDadosGraficoPie();
+            string valores = "";
+            string labels = "";
+            string cores = "";
+            var random = new Random();
+
+            for (int i = 0; i < lista.Count; i++)
+            {
+                valores += lista[i].Total.ToString() + ",";
+                labels += "'" + lista[i].PlanoConta.ToString() + "',";
+                cores += "'" + String.Format("#{0:X6}", random.Next(0x1000000)) + "',";
+            }
+
+
+            ViewBag.Cores = cores;
+            ViewBag.Labels = labels;
+            ViewBag.Valores = valores;
+
             return View();
         }
     }
