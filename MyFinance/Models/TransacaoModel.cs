@@ -53,7 +53,7 @@ namespace MyFinance.Models
                 filtro += $" and t.Data >= '{DateTime.Parse(Data).ToString("yyyy/MM/dd")}' and t.Data <=' {DateTime.Parse(DataFinal).ToString("yyyy/MM/dd")}' ";
             }
 
-            if (Tipo !=null)
+            if (Tipo != null)
             {
                 if (Tipo != "A")
                 {
@@ -184,5 +184,5 @@ namespace MyFinance.Models
             }
             return lista;
         }
-    } 
+    }
 }

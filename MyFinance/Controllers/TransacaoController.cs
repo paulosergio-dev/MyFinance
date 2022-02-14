@@ -91,7 +91,6 @@ namespace MyFinance.Controllers
                 cores += "'" + String.Format("#{0:X6}", random.Next(0x1000000)) + "',";
             }
 
-
             ViewBag.Cores = cores;
             ViewBag.Labels = labels;
             ViewBag.Valores = valores;
