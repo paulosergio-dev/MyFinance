@@ -1,29 +1,38 @@
 ﻿@model UsuarioModel
 
 @{
-    try
-    {
-        if (TempData["MensagemLoginInvalido"].ToString() != null)
-        {
-            <div class="alert alert-danger">
-                <strong>Atenção!</strong> @TempData["MensagemLoginInvalido"]
-            </div>
-        }
-    }
-    catch { }
+
+    Layout = "../Shared/_LayoutLogin.cshtml";
+
 }
 
-<form asp-controller="Usuario" asp-action="ValidarLogin">
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" asp-for="Email">
-    </div>
-    <div class="form-group">
-        <label for="pwd">Senha:</label>
-        <input type="password" class="form-control" asp-for="Senha">
-    </div>
-    <div class="checkbox">
-        <label><input type="checkbox"> Lembrar meu acesso</label>
-    </div>
-    <button type="submit" class="btn btn-default">Entrar</button>
-</form>
+<div class="container" style="background-color: rgba(190, 184, 184, 0.81); border-radius:10px; padding:20px; width:300px">
+    @{
+        try
+        {
+            if (TempData["MensagemLoginInvalido"].ToString() != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Atenção!</strong> @TempData["MensagemLoginInvalido"]
+                </div>
+            }
+        }
+        catch { }
+    }
+    <form asp-controller="Usuario" asp-action="ValidarLogin">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" asp-for="Email">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Senha:</label>
+            <input type="password" class="form-control" asp-for="Senha">
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox"> Lembrar meu acesso</label>
+        </div>
+        <button type="submit" class="btn btn-default">Entrar</button>
+
+        <button type="button" class="btn btn-primary" onclick="javascript: window.location.href='../Usuario/Registrar'">Registrar</button>
+    </form>
+</div>
