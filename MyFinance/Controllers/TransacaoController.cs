@@ -78,7 +78,7 @@ namespace MyFinance.Controllers
 
         public IActionResult Dashboard()
         {
-            List<DashBoard> lista = new DashBoard().RetornarDadosGraficoPie();
+            List<DashBoard> lista = new DashBoard(HttpContextAccessor).RetornarDadosGraficoPie();
             string valores = "";
             string labels = "";
             string cores = "";
