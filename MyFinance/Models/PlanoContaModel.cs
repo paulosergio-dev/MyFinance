@@ -11,9 +11,12 @@ namespace MyFinance.Models
     public class PlanoContaModel
     {
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Informe a descrição")]
         public string Descricao { get; set; }
+
         public string Tipo { get; set; }
+
         public int Usuario_Id { get; set; }
 
         public IHttpContextAccessor HttpContextAccessor { get; set; }

@@ -43,8 +43,6 @@
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
-
     <div class="container body-content" style="padding-top: 25px;">
         @RenderBody()
         <hr />
@@ -75,9 +73,9 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
-</body>
 
-<script>
+
+    <script>
 
     function CarregarUsuarioLogado() {
         var nome = '@HttpContextAccessor.HttpContext.Session.GetString("NomeUsuarioLogado")';
@@ -94,5 +92,6 @@
             window.location.href = '../Usuario/Login';
         }
     }
-</script>
+    </script>
+</body>
 </html>

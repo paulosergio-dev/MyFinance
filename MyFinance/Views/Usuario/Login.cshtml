@@ -8,6 +8,7 @@
 
 <div class="container" style="background-color: rgba(190, 184, 184, 0.81); border-radius:10px; padding:20px; width:300px">
     @{
+
         try
         {
             if (TempData["MensagemLoginInvalido"].ToString() != null)
@@ -32,7 +33,7 @@
             <label><input type="checkbox"> Lembrar meu acesso</label>
         </div>
 
-        <button type="button" class="btn btn-primary" onclick="javascript: window.location.href='../Usuario/Registrar'">Registrar</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:window.location.href='../Usuario/Registrar'">Registrar</button>
 
         <button type="submit" class="btn btn-default">Entrar</button>
     </form>
