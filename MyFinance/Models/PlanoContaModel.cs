@@ -12,7 +12,7 @@ namespace MyFinance.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Informe a descrição")]
+        [Required(ErrorMessage = "Informe a descrição.")]
         public string Descricao { get; set; }
 
         public string Tipo { get; set; }
