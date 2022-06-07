@@ -13,7 +13,6 @@
             <th>Conta</th>
             <th>Plano de Contas</th>
         </tr>
-
     </thead>
 
     @{
@@ -21,7 +20,6 @@
         {
             <tbody>
                 <tr>
-
                     <td><button type="button" class="btn btn-primary" onclick="Editar(@item.Id.ToString())">Editar</button></td>
                     <td><button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button></td>
                     <td>@item.Id.ToString()</td>
@@ -31,11 +29,9 @@
                     <td>@item.Descricao.ToString()</td>
                     <td>@item.NomeConta.ToString()</td>
                     <td>@item.DescricaoPlanoConta.ToString()</td>
-
                 </tr>
             </tbody>
         }
-
     }
 
 </table>
@@ -54,6 +50,4 @@
     function Editar(id) {
         window.location.href = "../Transacao/Registrar/" + id;
     }
-
-
 </script>

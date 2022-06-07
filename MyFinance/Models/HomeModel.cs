@@ -17,7 +17,7 @@ namespace MyFinance.Models
                     return dt.Rows[0]["Nome"].ToString();
                 }
             }
-            return "Nome não encontrado!";
+            return "Nome não encontrado na nossa base de dados!";
         }
     }
 }

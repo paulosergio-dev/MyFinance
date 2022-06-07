@@ -23,6 +23,5 @@ namespace MyFinance
                 .UseStartup<Startup>()
                 .UseKestrel()
                 .UseIISIntegration();
-
     }
 }

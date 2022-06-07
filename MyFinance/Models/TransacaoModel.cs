@@ -154,8 +154,6 @@ namespace MyFinance.Models
         {
             new DAL().ExecutarComandoSQL("DELETE FROM TRANSACAO WHERE ID = " + id);
         }
-
-
     }
 
     public class DashBoard
