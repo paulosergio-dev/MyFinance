@@ -15,18 +15,24 @@ namespace MyFinance.Models
 
         [Required(ErrorMessage = "Informe a data!")]
         public string Data { get; set; }
+
         public string DataFinal { get; set; }  //Utilizado para Filtros
+
         public string Tipo { get; set; }
+
         public double Valor { get; set; }
+
         [Required(ErrorMessage = "Informe a descrição!")]
         public string Descricao { get; set; }
+
         public int Conta_Id { get; set; }
+
         public string NomeConta { get; set; }
 
         public int Plano_Contas_Id { get; set; }
+
         public string DescricaoPlanoConta { get; set; }
-
-
+        
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
         public TransacaoModel()

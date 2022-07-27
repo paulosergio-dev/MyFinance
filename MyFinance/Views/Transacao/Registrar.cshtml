@@ -36,10 +36,8 @@
         <span asp-validation-for="Data" class="text-danger"></span>
     </div>
 
-
     <div class="form-group">
         <label>Tipo:</label>
-
         @{
             if (vTipo == "R")
             {
@@ -52,7 +50,6 @@
                 <div class="radio"><label><input type="radio" asp-for="Tipo" value="D" checked>Despesa</label></div>
             }
         }
-
     </div>
 
     <div class="form-group">

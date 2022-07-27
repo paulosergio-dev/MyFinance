@@ -17,8 +17,7 @@ namespace MyFinance.Util
             connection = new MySqlConnection(connectionString);
             connection.Open();
         }
-
-
+        
         //EXECUTA SELECTs
         public DataTable RetDataTable(string sql)
         {

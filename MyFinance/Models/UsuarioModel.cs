@@ -50,5 +50,4 @@ namespace MyFinance.Models
             objDAL.ExecutarComandoSQL(sql);
         }
     }
-
 }
