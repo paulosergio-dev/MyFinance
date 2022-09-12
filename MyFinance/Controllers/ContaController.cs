@@ -50,7 +50,5 @@ namespace MyFinance.Controllers
             objConta.Excluir(id);
             return RedirectToAction("Index");
         }
-
-
     }
 }
