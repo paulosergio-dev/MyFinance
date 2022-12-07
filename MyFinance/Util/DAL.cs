@@ -34,9 +34,6 @@ namespace MyFinance.Util
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.ExecuteNonQuery();
         }
-
-
     }
-
 }
 
