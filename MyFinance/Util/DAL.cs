@@ -1,39 +1,37 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace MyFinance.Util
 {
     public class DAL
     {
-        private static string server = "localhost";
-        private static string database = "financeiro";
-        private static string user = "root";
-        private static string password = "admin";
-        private static string connectionString = $"Server={server};Database={database};Uid={user};Pwd={password}";
-        private MySqlConnection connection;
+        // String de conexão para o SQL Server
+        private static string connectionString = "Server=localhost;Database=MyFinanceDB;Integrated Security=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+
+        // Conexão com o SQL Server
+        private SqlConnection connection;
 
         public DAL()
         {
-            connection = new MySqlConnection(connectionString);
-            connection.Open();
+            connection = new SqlConnection(connectionString);
+            connection.Open();  // Abrir conexão com o SQL Server
         }
-        
-        //EXECUTA SELECTs
+
+        // Executa SELECTs
         public DataTable RetDataTable(string sql)
         {
             DataTable dataTable = new DataTable();
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataAdapter da = new MySqlDataAdapter(command);
+            SqlCommand command = new SqlCommand(sql, connection);  // Usando SqlCommand para SQL Server
+            SqlDataAdapter da = new SqlDataAdapter(command);  // Usando SqlDataAdapter para SQL Server
             da.Fill(dataTable);
             return dataTable;
         }
 
-        //EXECUTA INSERTs, UPDATEs, DELETEs
+        // Executa INSERTs, UPDATEs, DELETEs
         public void ExecutarComandoSQL(string sql)
         {
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            SqlCommand command = new SqlCommand(sql, connection);  // Usando SqlCommand para SQL Server
             command.ExecuteNonQuery();
         }
     }
 }
-
