@@ -75,12 +75,12 @@ namespace MyFinance.Models
 
             string id_usuario_logado = HttpContextAccessor.HttpContext.Session.GetString("IdUsuarioLogado");
 
-            string sql = " select t.Id, t.Data, t.Tipo, t.Valor, t.Descricao as Descrição, " +
+            string sql = " select top 10 t.Id, t.Data, t.Tipo, t.Valor, t.Descricao as Descrição, " +
                          " t.Conta_Id, c.Nome as Conta, t.Plano_Contas_Id, p.Descricao as Plano_Conta " +
                          " from transacao as t inner join conta c " +
                          " on t.Conta_Id = c.Id inner join Plano_Contas as p " +
                          " on t.Plano_Contas_Id = p.Id " +
-                        $" where t.usuario_id = {id_usuario_logado} {filtro} order by t.data desc limit 10";
+                        $" where t.usuario_id = {id_usuario_logado} {filtro} order by t.data desc";
 
             DAL objDAL = new DAL();
             DataTable dt = objDAL.RetDataTable(sql);
