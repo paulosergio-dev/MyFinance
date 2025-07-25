@@ -1,97 +1,455 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyFinance</title>
-
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
-
+    <title>@ViewData["Title"] - MyFinance Premium</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Modern CSS -->
+    <link rel="stylesheet" href="~/css/modern-theme.css" asp-append-version="true" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    
+    <!-- Meta tags for better SEO -->
+    <meta name="description" content="MyFinance Premium - Acesse sua conta">
+    <meta name="theme-color" content="#667eea">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <!-- Background Elements -->
+        <div class="login-background">
+            <div class="bg-shape shape-1"></div>
+            <div class="bg-shape shape-2"></div>
+            <div class="bg-shape shape-3"></div>
+            <div class="floating-icons">
+                <i class="fas fa-chart-line"></i>
+                <i class="fas fa-coins"></i>
+                <i class="fas fa-piggy-bank"></i>
+                <i class="fas fa-credit-card"></i>
+                <i class="fas fa-wallet"></i>
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+        </div>
+        
+        <!-- Login Content -->
+        <div class="login-content">
+            <!-- Left Side - Branding -->
+            <div class="login-brand">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h1 class="brand-title">MyFinance</h1>
+                    <span class="brand-subtitle">Premium</span>
+                </div>
+                
+                <div class="brand-description">
+                    <h2>Gerencie suas finanças com inteligência</h2>
+                    <p>Uma plataforma moderna e segura para controlar seu dinheiro, acompanhar gastos e planejar seu futuro financeiro.</p>
+                    
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Segurança Avançada</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Relatórios Inteligentes</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Acesso Móvel</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side - Login Form -->
+            <div class="login-form-container">
+                <div class="login-form-card">
+                    @RenderBody()
+                </div>
+                
+                <!-- Theme Toggle -->
+                <div class="login-theme-toggle">
+                    <button class="theme-toggle" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modern JavaScript -->
+    <script src="~/js/modern-app.js" asp-append-version="true"></script>
+    
+    <!-- Login Specific Styles -->
     <style>
-        body {
-            /*background-image: url('../../images/finance.jpg');*/
-            background-image: url('../../images/planodefundosistema.jpg');
-            /*background-repeat: no-repeat;*/
-        }
-
-        /** {
+        .login-body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;            
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            font-family: var(--font-primary);
         }
-
-        .divSpan {
-            position: absolute;
-            top: 70%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        
+        .login-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+        
+        /* Background Animation */
+        .login-background {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            text-align: center;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        
+        .shape-3 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .floating-icons i {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            animation: floatIcon 8s linear infinite;
+        }
+        
+        .floating-icons i:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-icons i:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .floating-icons i:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .floating-icons i:nth-child(4) { left: 70%; animation-delay: 3s; }
+        .floating-icons i:nth-child(5) { left: 80%; animation-delay: 4s; }
+        .floating-icons i:nth-child(6) { left: 90%; animation-delay: 5s; }
+        
+      
+       
+        /* Login Content */
+        .login-content {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-2xl);
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Brand Side */
+        .login-brand {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             color: white;
+            padding: var(--spacing-xl);
         }
-
-        div span {
-            font-size: 22vw;
-            font-weight: 800;
-            text-shadow: -0.08em 0.03em 0.12em rgba(0, 0, 0, 0.9);
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
         }
-
-            div span:not(:first-child) {
-                margin-left: -0.23em;
-            }*/
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .brand-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #fff, rgba(255, 255, 255, 0.8));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            margin-left: var(--spacing-sm);
+        }
+        
+        .brand-description h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.3;
+        }
+        
+        .brand-description p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .feature-item i {
+            width: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Form Side */
+        .login-form-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .login-theme-toggle {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+        }
+        
+        .login-theme-toggle .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-theme-toggle .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Form Styles */
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        
+        .form-group-login {
+            position: relative;
+        }
+        
+        .form-control-login {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            padding-left: 3rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all var(--transition-normal);
+            outline: none;
+        }
+        
+        .form-control-login:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: var(--bg-card);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            transition: color var(--transition-fast);
+        }
+        
+        .form-control-login:focus + .input-icon {
+            color: var(--primary-color);
+        }
+        
+        .btn-login {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .btn-login.loading {
+            pointer-events: none;
+        }
+        
+        .btn-login.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+        
+        .register-link a:hover {
+            color: var(--secondary-color);
+        }
+        
+        /* Animations */
+       
+        
+        /* Dark Mode */
+        [data-theme="dark"] .login-form-card {
+            background: var(--dark-bg-card);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-theme="dark"] .form-control-login {
+            background: var(--dark-bg-secondary);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text-primary);
+        }
+        
+        [data-theme="dark"] .form-control-login:focus {
+            background: var(--dark-bg-card);
+        }
+        
+        
     </style>
-</head>
-<body>
-    @*<div class="divSpan" style="text-align:center">
-        <span>M</span>
-        <span>y</span>
-        <span>F</span>
-        <span>i</span>
-        <span>n</span>
-        <span>a</span>
-        <span>n</span>
-        <span>c</span>
-        <span>e</span>
-    </div>*@
-
-    <div class="container body-content" style="padding-top:80px;">
-
-        <div style="text-align:center"><img src="~/images/logo.png" /></div>
-
-        @RenderBody()
-    </div>
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-
+    
     @RenderSection("Scripts", required: false)
 </body>
 </html>

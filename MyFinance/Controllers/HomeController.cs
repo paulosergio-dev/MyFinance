@@ -1,25 +1,29 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MyFinance.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using MyFinance.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace MyFinance.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfiguration _configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public IActionResult Index()
         {
-            HomeModel objHomeModel = new HomeModel();
+            HomeModel objHomeModel = new HomeModel(_configuration);
             string nome = objHomeModel.LerNomeUsuario();
             ViewData["Nome"] = nome;
-
-            // ou fazer somente esse//
-            //ViewData["Nome"] = new HomeModel().LerNomeUsuario();
-            // ou fazer somente esse//
 
             return View();
         }

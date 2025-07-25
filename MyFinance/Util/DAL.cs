@@ -1,37 +1,100 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace MyFinance.Util
 {
-    public class DAL
+    public class DAL : IDisposable
     {
-        // String de conexão para o SQL Server
-        private static string connectionString = "Server=localhost;Database=MyFinanceDB;Integrated Security=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+        private readonly string connectionString;
+        private bool disposed = false;
 
-        // Conexão com o SQL Server
-        private SqlConnection connection;
-
-        public DAL()
+        public DAL(IConfiguration configuration)
         {
-            connection = new SqlConnection(connectionString);
-            connection.Open();  // Abrir conexão com o SQL Server
+            connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
+             
+
+        // Executa SELECTs com parâmetros seguros
+        public DataTable RetDataTable(string sql, Dictionary<string, object> parameters = null)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                DataTable dataTable = new DataTable();
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    using (var da = new SqlDataAdapter(command))
+                    {
+                        da.Fill(dataTable);
+                    }
+                }
+                return dataTable;
+            }
         }
 
-        // Executa SELECTs
-        public DataTable RetDataTable(string sql)
+        // Executa INSERTs, UPDATEs, DELETEs com parâmetros seguros
+        public int ExecutarComandoSQL(string sql, Dictionary<string, object> parameters = null)
         {
-            DataTable dataTable = new DataTable();
-            SqlCommand command = new SqlCommand(sql, connection);  // Usando SqlCommand para SQL Server
-            SqlDataAdapter da = new SqlDataAdapter(command);  // Usando SqlDataAdapter para SQL Server
-            da.Fill(dataTable);
-            return dataTable;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    return command.ExecuteNonQuery();
+                }
+            }
         }
 
-        // Executa INSERTs, UPDATEs, DELETEs
-        public void ExecutarComandoSQL(string sql)
+        // Executa queries que retornam valor único (scalar)
+        public object ExecutarScalar(string sql, Dictionary<string, object> parameters = null)
         {
-            SqlCommand command = new SqlCommand(sql, connection);  // Usando SqlCommand para SQL Server
-            command.ExecuteNonQuery();
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+                    return command.ExecuteScalar();
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed && disposing)
+            {
+                // Cleanup managed resources if needed
+                disposed = true;
+            }
         }
     }
 }

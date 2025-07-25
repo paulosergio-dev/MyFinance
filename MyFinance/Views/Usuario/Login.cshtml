@@ -1,42 +1,360 @@
-﻿@model UsuarioModel
-
 @{
-
-    Layout = "../Shared/_LayoutLogin.cshtml";
-
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
 
-<div class="container" style="background-color: rgba(190, 184, 184, 0.81); border-radius:10px; padding:20px; width:300px">
-    @{
-        try
-        {
-            if (TempData.ContainsKey("MensagemLoginInvalido") && TempData["MensagemLoginInvalido"] != null)
-            {
-                <div class="alert alert-danger">
-                    <strong>Atenção!</strong> @TempData["MensagemLoginInvalido"]
-                </div>
-            }
-        }
-        catch { }
-    } 
-
-    <form asp-controller="Usuario" asp-action="ValidarLogin">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" asp-for="Email">
-        </div>
-        <div class="form-group">
-            <label for="pwd">Senha:</label>
-            <input type="password" class="form-control" asp-for="Senha">
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox"> Lembrar meu acesso</label>
-        </div>
-
-        <button type="submit" class="btn btn-success"><strong>Entrar</strong></button>
-
-        <div style="float:right">
-            <button type="button" class="btn btn-warning" onclick="javascript:window.location.href='../Usuario/Registrar'"><strong>Registrar</strong></button>            
-        </div>
-    </form>
+<div class="login-header">
+    <h2 class="login-title">Bem-vindo de volta!</h2>
+    <p class="login-subtitle">Acesse sua conta para continuar</p>
 </div>
+
+<form asp-action="ValidarLogin" asp-controller="Usuario" method="post" class="login-form" id="loginForm">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group-login">
+        <input type="email" name="Email" class="form-control-login" placeholder="Digite seu email" required autocomplete="email" />
+        <i class="fas fa-envelope input-icon"></i>
+    </div>
+    
+    <div class="form-group-login">
+        <input type="password" name="Senha" class="form-control-login" placeholder="Digite sua senha" required autocomplete="current-password" />
+        <i class="fas fa-lock input-icon"></i>
+    </div>
+    
+    <div class="form-options">
+        <label class="remember-me">
+            <input type="checkbox" name="RememberMe" />
+            <span class="checkmark"></span>
+            Lembrar-me
+        </label>
+        <a href="#" class="forgot-password" onclick="showForgotPassword()">Esqueceu sua senha?</a>
+    </div>
+    
+    <button type="submit" class="btn-login" id="loginBtn">
+        <span class="btn-text">Entrar</span>
+        <i class="fas fa-arrow-right btn-icon"></i>
+    </button>
+</form>
+
+<div class="register-link">
+    <p>Não tem uma conta? <a href="@Url.Action("Registrar", "Usuario")">Cadastre-se aqui</a></p>
+</div>
+
+<!-- Demo Credentials -->
+<div class="demo-credentials">
+    <h4>Credenciais de Demonstração</h4>
+    <div class="demo-account" onclick="fillDemoCredentials('admin@myfinance.com', 'admin123')">
+        <div class="demo-info">
+            <strong>Administrador</strong>
+            <span>admin@myfinance.com</span>
+        </div>
+        <i class="fas fa-copy"></i>
+    </div>
+    <div class="demo-account" onclick="fillDemoCredentials('user@myfinance.com', 'user123')">
+        <div class="demo-info">
+            <strong>Usuário</strong>
+            <span>user@myfinance.com</span>
+        </div>
+        <i class="fas fa-copy"></i>
+    </div>
+</div>
+
+<style>
+/* Form Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    margin: var(--spacing-md) 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.remember-me input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    background: var(--bg-card);
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.remember-me input[type="checkbox"]:checked {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.remember-me input[type="checkbox"]:checked::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 8px;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.forgot-password:hover {
+    color: var(--secondary-color);
+}
+
+/* Button Enhancements */
+.btn-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-icon {
+    transition: transform var(--transition-fast);
+}
+
+.btn-login:hover .btn-icon {
+    transform: translateX(4px);
+}
+
+/* Demo Credentials */
+.demo-credentials {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.demo-credentials h4 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.demo-account {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+}
+
+.demo-account:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.demo-account:last-child {
+    margin-bottom: 0;
+}
+
+.demo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.demo-info strong {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.demo-info span {
+    font-size: 0.625rem;
+    color: var(--text-muted);
+}
+
+.demo-account i {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+/* Loading State */
+.btn-login.loading .btn-text {
+    opacity: 0;
+}
+
+.btn-login.loading .btn-icon {
+    display: none;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .demo-credentials {
+    background: var(--dark-bg-secondary);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .demo-account {
+    background: var(--dark-bg-card);
+}
+
+[data-theme="dark"] .remember-me input[type="checkbox"] {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: var(--dark-bg-secondary);
+}
+</style>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    
+    // Form submission with loading state
+    loginForm.addEventListener('submit', function(e) {
+        loginBtn.classList.add('loading');
+        loginBtn.disabled = true;
+        
+        // Simulate processing time
+        setTimeout(() => {
+            // Form will submit normally
+        }, 500);
+    });
+    
+    // Enhanced form validation
+    const inputs = loginForm.querySelectorAll('.form-control-login');
+    inputs.forEach(input => {
+        input.addEventListener('blur', validateField);
+        input.addEventListener('input', clearErrors);
+    });
+    
+    function validateField(e) {
+        const field = e.target;
+        const value = field.value.trim();
+        
+        // Remove existing errors
+        clearFieldError(field);
+        
+        if (!value) {
+            showFieldError(field, 'Este campo é obrigatório');
+            return false;
+        }
+               
+        
+        if (field.type === 'password' && value.length < 6) {
+            showFieldError(field, 'Senha deve ter pelo menos 6 caracteres');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    function clearErrors(e) {
+        clearFieldError(e.target);
+    }
+    
+    function showFieldError(field, message) {
+        field.style.borderColor = '#f56565';
+        
+        let errorDiv = field.parentNode.querySelector('.field-error');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.className = 'field-error';
+            errorDiv.style.cssText = `
+                color: #f56565;
+                font-size: 0.75rem;
+                margin-top: 4px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            `;
+            field.parentNode.appendChild(errorDiv);
+        }
+        
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i>${message}`;
+    }
+    
+    function clearFieldError(field) {
+        field.style.borderColor = '';
+        const errorDiv = field.parentNode.querySelector('.field-error');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+    }});
+
+// Demo credentials functionality
+function fillDemoCredentials(email, password) {
+    const emailInput = document.querySelector('input[name="Email"]');
+    const passwordInput = document.querySelector('input[name="Senha"]');
+    
+    // Animate filling
+    emailInput.focus();
+    typeText(emailInput, email, () => {
+        passwordInput.focus();
+        typeText(passwordInput, password, () => {
+            window.myFinanceApp.showNotification('Credenciais preenchidas! Clique em "Entrar" para continuar.', 'success');
+        });
+    });
+}
+
+function typeText(input, text, callback) {
+    input.value = '';
+    let i = 0;
+    
+    const typeInterval = setInterval(() => {
+        input.value += text[i];
+        i++;
+        
+        if (i >= text.length) {
+            clearInterval(typeInterval);
+            if (callback) callback();
+        }
+    }, 50);
+}
+
+// Forgot password functionality
+function showForgotPassword() {
+    window.myFinanceApp.showNotification('Funcionalidade de recuperação de senha em desenvolvimento!', 'info');
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Enter to submit
+    if (e.key === 'Enter' && e.target.classList.contains('form-control-login')) {
+        const form = e.target.closest('form');
+        if (form) {
+            form.submit();
+        }
+    }
+    
+    // Demo shortcuts
+    if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+            case '1':
+                e.preventDefault();
+                fillDemoCredentials('admin@myfinance.com', 'admin123');
+                break;
+            case '2':
+                e.preventDefault();
+                fillDemoCredentials('user@myfinance.com', 'user123');
+                break;
+        }
+    }
+});
+</script>
+}

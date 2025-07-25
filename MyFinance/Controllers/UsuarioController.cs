@@ -5,11 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyFinance.Models;
+using MyFinance.Util;
+using MyFinance.Services;
 
 namespace MyFinance.Controllers
 {
     public class UsuarioController : Controller
     {
+        private readonly DAL _dal;
+        private readonly IPasswordHashService _passwordHashService;
+
+        public UsuarioController(DAL dal, IPasswordHashService passwordHashService)
+        {
+            _dal = dal;
+            _passwordHashService = passwordHashService;
+        }
+
         [HttpGet]
         public IActionResult Login(int? id)
         {
@@ -25,9 +36,11 @@ namespace MyFinance.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ValidarLogin(UsuarioModel usuario)
-        {
-            bool login = usuario.ValidarLogin();
+        {            
+
+            bool login = usuario.ValidarLogin(_dal, _passwordHashService);
 
             if (login)
             {
@@ -37,20 +50,31 @@ namespace MyFinance.Controllers
             }
             else
             {
-                TempData["MensagemLoginInvalido"] = "Dados de login inválidos!";
+                TempData["MensagemLoginInvalido"] = "Email ou senha incorretos!";
                 return RedirectToAction("Login");
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Registrar(UsuarioModel usuario)
         {
             if (ModelState.IsValid)
             {
-                usuario.RegistrarUsuario();
-                return RedirectToAction("Sucesso");
+                bool sucesso = usuario.RegistrarUsuario(_dal, _passwordHashService);
+                
+                if (sucesso)
+                {
+                    TempData["MensagemSucesso"] = "Usuário registrado com sucesso!";
+                    return RedirectToAction("Sucesso");
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Email já existe ou erro no registro!";
+                    return View(usuario);
+                }
             }
-            return View();
+            return View(usuario);
         }
 
         [HttpGet]

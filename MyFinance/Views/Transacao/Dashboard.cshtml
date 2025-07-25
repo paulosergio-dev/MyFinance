@@ -1,40 +1,562 @@
-﻿<h3>DASHBOARD</h3>
+@{
+    ViewData["Title"] = "Dashboard";
+}
 
-<br /><br /><br /><br />
+<div class="dashboard-container fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-tachometer-alt"></i>
+            Dashboard Financeiro
+        </h1>
+        <p class="page-subtitle">Visão geral das suas finanças em tempo real</p>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card slide-in" style="animation-delay: 0.1s;">
+            <div class="stat-icon" style="background: var(--success-gradient);">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="stat-value" id="totalReceitas">R$ 0,00</div>
+            <div class="stat-label">Total de Receitas</div>
+            <div class="stat-change positive">+12% este mês</div>
+        </div>
 
-<div id="canvas-holder" style="width:90%">
-    <canvas id="chart-area"></canvas>
+        <div class="stat-card slide-in" style="animation-delay: 0.2s;">
+            <div class="stat-icon" style="background: var(--danger-gradient);">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+            <div class="stat-value" id="totalDespesas">R$ 0,00</div>
+            <div class="stat-label">Total de Despesas</div>
+            <div class="stat-change negative">+5% este mês</div>
+        </div>
+
+        <div class="stat-card slide-in" style="animation-delay: 0.3s;">
+            <div class="stat-icon" style="background: var(--primary-gradient);">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="stat-value" id="saldoTotal">R$ 0,00</div>
+            <div class="stat-label">Saldo Total</div>
+            <div class="stat-change positive">+8% este mês</div>
+        </div>
+
+        <div class="stat-card slide-in" style="animation-delay: 0.4s;">
+            <div class="stat-icon" style="background: var(--warning-gradient);">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-value" id="metaMensal">85%</div>
+            <div class="stat-label">Meta Mensal</div>
+            <div class="stat-change positive">No prazo</div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        <!-- Expenses Pie Chart -->
+        <div class="card chart-card slide-in" style="animation-delay: 0.5s;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Despesas por Categoria
+                </h3>
+                <div class="card-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="refreshExpensesChart()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="expensesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Trend Chart -->
+        <div class="card chart-card slide-in" style="animation-delay: 0.6s;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Tendência Mensal
+                </h3>
+                <div class="card-actions">
+                    <select class="form-control form-control-sm" id="periodSelect">
+                        <option value="6">6 meses</option>
+                        <option value="12">12 meses</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="trendChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions & Goals -->
+    <div class="bottom-grid">
+        <!-- Recent Transactions -->
+        <div class="card slide-in" style="animation-delay: 0.7s;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-clock"></i>
+                    Transações Recentes
+                </h3>
+                <a href="@Url.Action("Index", "Transacao")" class="btn btn-primary btn-sm">
+                    Ver Todas
+                </a>
+            </div>
+            <div class="card-body">
+                <div id="recentTransactions" class="transactions-list">
+                    <!-- Transactions will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Goals -->
+        <div class="card slide-in" style="animation-delay: 0.8s;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-target"></i>
+                    Metas Financeiras
+                </h3>
+                <button class="btn btn-primary btn-sm" onclick="addGoal()">
+                    <i class="fas fa-plus"></i>
+                    Nova Meta
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="goals-list">
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-name">Reserva de Emergência</div>
+                            <div class="goal-amount">R$ 15.000,00</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <span class="progress-text">65%</span>
+                        </div>
+                    </div>
+
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-name">Viagem</div>
+                            <div class="goal-amount">R$ 8.000,00</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%;"></div>
+                            </div>
+                            <span class="progress-text">30%</span>
+                        </div>
+                    </div>
+
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-name">Investimentos</div>
+                            <div class="goal-amount">R$ 25.000,00</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%;"></div>
+                            </div>
+                            <span class="progress-text">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script>
-    var randomScalingFactor = function () {
-        return Math.round(Math.random() * 100);
-    };
+<style>
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
 
-    var config = {
-        type: 'pie',
+.page-header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.chart-card {
+    min-height: 400px;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+.transactions-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background var(--transition-fast);
+}
+
+.transaction-item:hover {
+    background: var(--bg-secondary);
+}
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--spacing-md);
+}
+
+.transaction-info {
+    flex: 1;
+}
+
+.transaction-title {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.transaction-category {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.transaction-amount {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.transaction-amount.positive {
+    color: #48bb78;
+}
+
+.transaction-amount.negative {
+    color: #f56565;
+}
+
+.goals-list {
+    space-y: var(--spacing-md);
+}
+
+.goal-item {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.goal-info {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.goal-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.goal-amount {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.goal-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 35px;
+}
+
+
+</style>
+
+@section Scripts {
+<script>
+let expensesChart, trendChart;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCharts();
+    loadRecentTransactions();
+    loadStatistics();
+});
+
+function initializeCharts() {
+    // Expenses Pie Chart
+    const expensesCtx = document.getElementById('expensesChart').getContext('2d');
+    
+    // Parse data from ViewBag (assuming it's available)
+    const labels = [@Html.Raw(ViewBag.Labels ?? "''")];
+    const values = [@Html.Raw(ViewBag.Valores ?? "0")];
+    const colors = [@Html.Raw(ViewBag.Cores ?? "'#667eea'")];
+
+    expensesChart = new Chart(expensesCtx, {
+        type: 'doughnut',
         data: {
+            labels: labels.filter(l => l),
             datasets: [{
-                data: [
-                    @Html.Raw(ViewBag.Valores)],
-                backgroundColor: [
-                    @Html.Raw(ViewBag.Cores)
-                ],
-                label: 'Dataset 1'
-            }],
-            labels: [
-                @Html.Raw(ViewBag.Labels)
-            ]
+                data: values.filter(v => v > 0),
+                backgroundColor: colors.filter(c => c),
+                borderWidth: 0,
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#fff'
+            }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12,
+                            family: 'Inter'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgba(102, 126, 234, 0.3)',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: R$ ${value.toLocaleString('pt-BR')} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateRotate: true,
+                duration: 1000
+            }
         }
-    };
+    });
 
-    window.onload = function () {
-        var ctx = document.getElementById('chart-area').getContext('2d');
-        window.myPie = new Chart(ctx, config);
-    };
+    // Monthly Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    
+    // Sample data for trend chart
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+    const receipts = [3500, 4200, 3800, 4500, 3900, 4800];
+    const expenses = [2800, 3200, 3100, 3400, 3300, 3600];
+
+    trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Receitas',
+                data: receipts,
+                borderColor: '#48bb78',
+                backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                fill: false,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#48bb78',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }, {
+                label: 'Despesas',
+                data: expenses,
+                borderColor: '#f56565',
+                backgroundColor: 'rgba(245, 101, 101, 0.1)',
+                fill: false,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#f56565',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR');
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgba(102, 126, 234, 0.3)',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: R$ ${context.parsed.y.toLocaleString('pt-BR')}`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+}
+
+function loadRecentTransactions() {
+    // Sample recent transactions
+    const transactions = [
+        { id: 1, description: 'Supermercado', category: 'Alimentação', amount: -245.50, type: 'D', icon: 'fas fa-shopping-cart', color: '#f56565' },
+        { id: 2, description: 'Salário', category: 'Receita', amount: 4500.00, type: 'R', icon: 'fas fa-money-bill-wave', color: '#48bb78' },
+        { id: 3, description: 'Combustível', category: 'Transporte', amount: -120.00, type: 'D', icon: 'fas fa-gas-pump', color: '#ed8936' },
+        { id: 4, description: 'Internet', category: 'Utilidades', amount: -89.90, type: 'D', icon: 'fas fa-wifi', color: '#667eea' },
+        { id: 5, description: 'Freelance', category: 'Receita Extra', amount: 800.00, type: 'R', icon: 'fas fa-laptop-code', color: '#48bb78' }
+    ];
+
+    const container = document.getElementById('recentTransactions');
+    container.innerHTML = transactions.map(transaction => `
+        <div class="transaction-item">
+            <div class="transaction-icon" style="background-color: ${transaction.color}20; color: ${transaction.color};">
+                <i class="${transaction.icon}"></i>
+            </div>
+            <div class="transaction-info">
+                <div class="transaction-title">${transaction.description}</div>
+                <div class="transaction-category">${transaction.category}</div>
+            </div>
+            <div class="transaction-amount ${transaction.amount > 0 ? 'positive' : 'negative'}">
+                ${transaction.amount > 0 ? '+' : ''}R$ ${Math.abs(transaction.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </div>
+        </div>
+    `).join('');
+}
+
+function loadStatistics() {
+    // Sample statistics - in a real app, this would come from the server
+    document.getElementById('totalReceitas').textContent = 'R$ 5.300,00';
+    document.getElementById('totalDespesas').textContent = 'R$ 3.200,00';
+    document.getElementById('saldoTotal').textContent = 'R$ 2.100,00';
+}
+
+function refreshExpensesChart() {
+    if (expensesChart) {
+        expensesChart.destroy();
+    }
+    initializeCharts();
+    window.myFinanceApp.showNotification('Gráfico atualizado com sucesso!', 'success');
+}
+
+function addGoal() {
+    window.myFinanceApp.showNotification('Funcionalidade em desenvolvimento!', 'info');
+}
 </script>
+}
